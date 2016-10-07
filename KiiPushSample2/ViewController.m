@@ -56,7 +56,11 @@
             KiiPushSubscription *subscription = user.pushSubscription;
             [subscription subscribe:bucket block:^(KiiPushSubscription * _Nonnull subscription, NSError * _Nullable error) {
                 if (error != nil) {
-                    _infoText.text = @"Failed to subscribe bucket";
+                    if ([error kiiHttpStatus] == 409) {
+                        _infoText.text = @"Already subscribed to the bucket";
+                    } else {
+                        _infoText.text = @"Failed to subscribe the bucket";
+                    }
                     return;
                 }
                 _infoText.text = @"Subscription succeeded.";
