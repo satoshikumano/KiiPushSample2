@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <KiiSDK/KiiSDK.h>
 
 @interface AppDelegate ()
 
@@ -17,9 +18,40 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [Kii beginWithID:@"9ab34d8b" andKey:@"7a950d78956ed39f3b0815f0f001b43b" andSite:kiiSiteJP];
+    [self registerNotification:application];
     return YES;
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"Device token %@", deviceToken);
+    self.token = deviceToken;
+}
+
+- (void) registerNotification:(UIApplication*)application {
+//    UIMutableUserNotificationAction* action = [[UIMutableUserNotificationAction alloc] init];
+//    action.identifier = @"APNS";
+//    action.title = @"APNS";
+//    action.activationMode = UIUserNotificationActivationModeForeground;
+//    [action setAuthenticationRequired:NO];
+//    [action setDestructive:YES];
+//
+//    UIMutableUserNotificationCategory* category = [[UIMutableUserNotificationCategory alloc] init];
+//    category.identifier = @"CATEGORY";
+//    [category setActions:@[action] forContext:UIUserNotificationActionContextMinimal];
+//    [category setActions:@[action] forContext:UIUserNotificationActionContextDefault];
+//
+//    NSMutableSet* categories = [[NSMutableSet alloc] init];
+//    [categories addObject:category];
+    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+    [application registerForRemoteNotifications];
+    [application registerUserNotificationSettings:settings];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"Notification received %@", userInfo);
+    completionHandler(UIBackgroundFetchResultNoData);
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
