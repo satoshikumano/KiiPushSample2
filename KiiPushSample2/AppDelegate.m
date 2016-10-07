@@ -50,6 +50,14 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"Notification received %@", userInfo);
+    NSString* desc = [userInfo description];
+    desc = desc ? desc : @"No info";
+    UIAlertView *theAlert = [[UIAlertView alloc] initWithTitle:@"APNS"
+                                                       message:desc
+                                                      delegate:self
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+    [theAlert show];
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
